@@ -4,11 +4,15 @@
 import logging
 import sys
 import time
+import os
 import schedule
 from typing import NoReturn
 
-from src.synchronizer import CalendarSynchronizer
-from src.config import Config
+# Add src directory to path for imports
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+
+from synchronizer import CalendarSynchronizer
+from config import Config
 
 
 def setup_logging() -> None:
