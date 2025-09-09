@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  yandex-to-google-calendar:
+    build: .
+    container_name: yandex-to-google-calendar
+    restart: unless-stopped
+    environment:
+      # Yandex Calendar credentials
+      - YANDEX_USERNAME=${YANDEX_USERNAME}
+      - YANDEX_PASSWORD=${YANDEX_PASSWORD}
+      - YANDEX_CALDAV_URL=${YANDEX_CALDAV_URL:-https://caldav.yandex.ru}
+      
+      # Google Calendar settings
+      - GOOGLE_CALENDAR_ID=${GOOGLE_CALENDAR_ID:-primary}
+      
+      # Sync settings
+      - SYNC_INTERVAL_MINUTES=${SYNC_INTERVAL_MINUTES:-30}
+      - DAYS_AHEAD=${DAYS_AHEAD:-30}
+      - DAYS_BEHIND=${DAYS_BEHIND:-7}
+      
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    
+    volumes:
+      # Mount data directory for credentials and state persistence
+      - ./data:/app/data
+      
+      # Mount logs directory (optional)
+      - ./logs:/app/logs
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import json; print('OK' if json.load(open('/app/data/sync_state.json', 'r')) else 'ERROR')"]
+      interval: 1h
+      timeout: 30s
+      retries: 3
+      start_period: 10s
