@@ -4,10 +4,10 @@ import logging
 from datetime import datetime, timedelta
 from typing import List, Dict, Any
 
-from .yandex_calendar import YandexCalendarClient
-from .google_calendar import GoogleCalendarClient
-from .sync_state import SyncStateManager
-from .config import Config
+from yandex_calendar import YandexCalendarClient
+from google_calendar import GoogleCalendarClient
+from sync_state import SyncStateManager
+from config import Config
 
 logger = logging.getLogger(__name__)
 
